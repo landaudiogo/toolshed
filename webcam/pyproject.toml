@@ -9,7 +9,7 @@ dependencies = [
 ]
 
 [project.scripts]
-server = "src:start"
+webcam = "src:start"
 
 [build-system]
 requires = ["hatchling"]
