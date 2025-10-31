@@ -1,0 +1,16 @@
+[project]
+name = "src"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.1.2",
+    "gunicorn>=23.0.0",
+]
+
+[project.scripts]
+server = "src:start"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

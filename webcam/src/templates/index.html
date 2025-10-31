@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JvF Webcam</title>
+</head>
+<body>
+    <h1>JvF Webcam is currently {{ state }}</h1>
+
+    <form action="{{ url_for('click') }}" method="POST">
+        <button type="submit">Click me!</button>
+    </form>
+    {% if state == "On" %}
+        <img style="display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 25%);" src="http://localhost:8081/" width="90%"
+    {% endif %}
+</body>
+</html>
