@@ -20,6 +20,7 @@ def click():
         time.sleep(1.5)
     elif state == False and motion != None:
         motion.terminate()
+        motion = None
 
     return redirect(url_for("index"))
 
