@@ -1,6 +1,5 @@
-from typing import NamedTuple, Optional
-from collections import namedtuple
-from flask import Flask, render_template, request, redirect, url_for
+from typing import Optional
+from flask import Flask, render_template, redirect, url_for, Response
 from threading import Lock
 from subprocess import Popen
 import subprocess
@@ -28,6 +27,35 @@ WEBCAM_ADDRESS = os.getenv("WEBCAM_ADDRESS", "http://localhost:8081/")
 def state():
     with webcam.lock:
         return str(webcam.state)
+
+@app.route("/toggle", methods=["POST"])
+def toggle():
+    motion_config = None
+    for entry in os.listdir():
+        if entry.endswith(".conf"):
+            motion_config = entry
+            break
+    if motion_config is not None:
+        with webcam.lock:
+            webcam.state ^= True
+            if webcam.state: 
+                r, w = os.pipe()
+                webcam.motion = subprocess.Popen(
+                    ["motion", "-c", motion_config],
+                    stdout=w,
+                    stderr=w,
+                    text=True,
+                    bufsize=1
+                )
+                with os.fdopen(r, mode="r", encoding="utf-8") as pipe:
+                    for line in pipe:
+                        if re.search(r"Camera \d+ started", line):
+                            break
+            elif webcam.state == False and webcam.motion != None:
+                webcam.motion.terminate()
+                webcam.motion = None
+
+    return Response(status=200)    
 
 @app.route("/click", methods=["POST"])
 def click():
