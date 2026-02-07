@@ -7,7 +7,7 @@ USAGE="
 Usage: $script <subdomain>
 
 Positional parameters:
-    subdomain: subdomain which will be prepended to $ZONE. E.g. if 'subdomain=example' then the record name will be example.$ZONE
+    subdomain: subdomain which will be prepended to '$ZONE'. E.g. if 'subdomain=example' then the record name will be example.$ZONE
 "
 
 if (( $# != 1 )); then
