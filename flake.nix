@@ -39,10 +39,13 @@
                     ]
                 );
             venv = pythonSet.mkVirtualEnv "webcam" workspace.deps.default;
+
+            pdnsctl = (pkgs.callPackage (import ./pdnsctl) {});
         in 
         {
             devShells.${system} = {
                 webcam = import ./webcam { inherit pkgs; };
+                pdnsctl = pdnsctl.devShell;
             };
             
             packages.${system} = {
@@ -51,6 +54,7 @@
                     source ${venv}/bin/activate
                     ${venv}/bin/webcam "$@"
                 '';
+                pdnsctl = pdnsctl.package;
             };
 
             images.${system} = {
