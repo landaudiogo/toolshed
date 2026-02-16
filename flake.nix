@@ -40,12 +40,14 @@
                 );
             venv = pythonSet.mkVirtualEnv "webcam" workspace.deps.default;
 
-            pdnsctl = (pkgs.callPackage (import ./pdnsctl) {});
+            pdnsctl = pkgs.callPackage ./pdnsctl {};
+            percentile-ps = pkgs.callPackage ./percentile-ps {};
         in 
         {
             devShells.${system} = {
                 webcam = import ./webcam { inherit pkgs; };
                 pdnsctl = pdnsctl.devShell;
+                percentile-ps = percentile-ps.devShell;
             };
             
             packages.${system} = {
@@ -55,6 +57,7 @@
                     ${venv}/bin/webcam "$@"
                 '';
                 pdnsctl = pdnsctl.package;
+                percentile-ps = percentile-ps.package;
             };
 
             images.${system} = {
@@ -70,6 +73,13 @@
                             Entrypoint = [ "/bin/webcam" ];
                         };
                     };
+            };
+
+            apps.${system} = {
+                percentile-ps = {
+                    type = "app";
+                    program = "${self.packages.${system}.percentile-ps}/bin/percentile-ps";
+                };
             };
         };
 }
