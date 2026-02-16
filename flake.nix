@@ -42,6 +42,7 @@
 
             pdnsctl = pkgs.callPackage ./pdnsctl {};
             percentile-ps = pkgs.callPackage ./percentile-ps {};
+            epoch-to-timestamp = pkgs.callPackage ./epoch-to-timestamp {};
         in 
         {
             devShells.${system} = {
@@ -58,6 +59,7 @@
                 '';
                 pdnsctl = pdnsctl.package;
                 percentile-ps = percentile-ps.package;
+                epoch-to-timestamp = epoch-to-timestamp.package;
             };
 
             images.${system} = {
@@ -80,6 +82,7 @@
                     type = "app";
                     program = "${self.packages.${system}.percentile-ps}/bin/percentile-ps";
                 };
+                epoch-to-timestamp = epoch-to-timestamp.app;
             };
         };
 }
