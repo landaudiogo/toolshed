@@ -4,10 +4,10 @@ set -euo pipefail
 
 script=$(basename "$0")
 USAGE="
-Usage: $script <subdomain>
+Usage: $script <record-name>
 
 Positional parameters:
-    subdomain: subdomain which will be prepended to '$ZONE'. E.g. if 'subdomain=example' then the record name will be example.$ZONE
+    record-name: DNS Canonical A Record Name (e.g. example.ad.dlandau.nl.)
 "
 
 if (( $# != 1 )); then
@@ -15,7 +15,7 @@ if (( $# != 1 )); then
     exit 1
 fi
 
-subdomain="$1"
+record_name="$1"
 
 curl \
     -H "X-API-Key: $PDNS_API_KEY" \
@@ -25,7 +25,7 @@ curl \
     --data '{
         "rrsets": [
             {
-                "name": "'"$subdomain"'.'"$ZONE"'", 
+                "name": "'"$record_name"'", 
                 "type": "A", 
                 "changetype": "DELETE"
             }

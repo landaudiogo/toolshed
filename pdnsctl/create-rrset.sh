@@ -4,10 +4,10 @@ set -euo pipefail
 
 script=$(basename "$0")
 USAGE="
-Usage: $script <subdomain> <ipv4>
+Usage: $script <record-name> <ipv4>
 
 Positional parameters:
-    subdomain: subdomain which will be prepended to $ZONE. E.g. if 'subdomain=example' then the record name will be example.$ZONE
+    record-name: DNS A Record Name
     ipv4: IPv4 address which to link to the record
 "
 
@@ -16,7 +16,7 @@ if (( $# != 2 )); then
     exit 1
 fi
 
-subdomain="$1"
+record_name="$1"
 ipv4="$2"
 
 curl \
@@ -27,7 +27,7 @@ curl \
     --data '{
         "rrsets": [
             {
-                "name": "'"$subdomain"'.'"$ZONE"'", 
+                "name": "'"$record_name"'", 
                 "type": "A", 
                 "ttl": 3600, 
                 "changetype": "REPLACE", 
