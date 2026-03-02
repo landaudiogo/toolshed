@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from itertools import permutations
 
-IGNORE = "Diogo Landau"
+IGNORE = ["Diogo Landau"]
 
 with open('datumprikker.html', 'r') as f: 
     content = f.read()
@@ -20,15 +20,14 @@ for slot in slots:
     maybe = responses.find(**{'class': 'responses responses_maybe'})
     no = responses.find(**{'class': 'responses responses_no'})
     for span in yes.find_all(**{'class': 'name'}):
-        name = span.string.strip()
-        if name == IGNORE: 
+        name = span.string.strip() if span.string is not None else span.font.string.strip()
+        if name in IGNORE: 
             continue
         availabilities.setdefault(name, set()).add(slot_str)
         timeslots.add(slot_str)
 
 
 earliest_finish = None
-candidates = []
 students = list(availabilities.keys())
 timeslots = list(timeslots)
 timeslots.sort()
@@ -50,9 +49,7 @@ for p in permutations(timeslots, len(students)):
     for i, timeslot in enumerate(p):
         match_str = f'{timeslot} = {students[i]}'
         candidate.append(match_str)
-    candidates.append(candidate)
 
-for candidate in candidates:
     candidate.sort()
     print("\n")
     for timeslot in candidate:
