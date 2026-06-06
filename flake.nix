@@ -43,12 +43,14 @@
             pdnsctl = pkgs.callPackage ./pdnsctl {};
             percentile-ps = pkgs.callPackage ./percentile-ps {};
             epoch-to-timestamp = pkgs.callPackage ./epoch-to-timestamp {};
+            subsync = pkgs.callPackage ./subsync {};
         in 
         {
             devShells.${system} = {
                 webcam = import ./webcam { inherit pkgs; };
                 pdnsctl = pdnsctl.devShell;
                 percentile-ps = percentile-ps.devShell;
+                subsync = subsync.devShell;
             };
             
             packages.${system} = {
@@ -60,6 +62,7 @@
                 pdnsctl = pdnsctl.package;
                 percentile-ps = percentile-ps.package;
                 epoch-to-timestamp = epoch-to-timestamp.package;
+                subsync = subsync.package;
             };
 
             images.${system} = {
@@ -83,6 +86,7 @@
                     program = "${self.packages.${system}.percentile-ps}/bin/percentile-ps";
                 };
                 epoch-to-timestamp = epoch-to-timestamp.app;
+                subsync = subsync.app;
             };
         };
 }
