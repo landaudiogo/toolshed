@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from itertools import permutations
+from dateutil import parser
 
 IGNORE = ["Diogo Landau"]
 
@@ -53,5 +54,9 @@ for p in permutations(timeslots, len(students)):
     candidate.sort()
     print("\n")
     for timeslot in candidate:
-        print(timeslot)
+        timeslot, student = timeslot.split(" = ")
+        start, end = parser.parse(timeslot.split(" => ")[0]), parser.parse(timeslot.split(" => ")[1])
+        start_time, end_time = start.strftime("%T"), end.strftime("%T")
+        result = "%-20s %s => %s" % (student[:19] + ":", start_time, end_time)
+        print(result)
     print("\n")
